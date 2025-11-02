@@ -80,13 +80,16 @@ class AtmosphereMixin:
             )
 
         # upsample to the sim resolution
-        return da.asarray(
+        loading = da.asarray(
             sp.interpolate.interp1d(
                 obs.atmosphere.coords.t,
                 atmosphere_loading,
-                kind="quadratic",
+                kind="cubic",
                 bounds_error=False,
                 fill_value="extrapolate",
+                axis=-1,
             )(obs.coords.t),
             dtype=self.dtype,
         )
+
+        return loading
